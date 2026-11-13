@@ -1,8 +1,7 @@
 package com.example.library_api.controller;
 
 import com.example.library_api.model.Book;
-import com.example.library_api.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.library_api.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,41 +11,35 @@ import java.util.List;
 @RequestMapping("/books")
 public class BookController {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping
     public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+        return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable Long id) {
-        return bookRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Book getBook(@PathVariable Long id) {
+        return bookService.getBook(id);
     }
 
     @PostMapping
     public Book addBook(@RequestBody Book book) {
-        return bookRepository.save(book);
+        return bookService.addBook(book);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
-        return bookRepository.findById(id).map(book -> {
-            book.setTitle(updatedBook.getTitle());
-            book.setAuthor(updatedBook.getAuthor());
-            return ResponseEntity.ok(bookRepository.save(book));
-        }).orElse(ResponseEntity.notFound().build());
+    public Book updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
+        return bookService.updateBook(id, updatedBook);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        if (!bookRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        bookRepository.deleteById(id);
+        bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
     }
 }

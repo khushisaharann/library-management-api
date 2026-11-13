@@ -3,13 +3,26 @@
 A REST API for managing a library system — books, members, and borrow/return records — built with Java and Spring Boot.
 
 ## Features
-- Full CRUD operations for books
-- Member registration
-- Borrow and return tracking with relational data (Book ↔ Member ↔ BorrowRecord)
+- Three relational entities: Book, Member, BorrowRecord (BorrowRecord → Book and Member via `@ManyToOne`)
+- CRUD operations for books, plus member registration
+- Borrow/return logic with availability tracking to prevent double-borrowing
 - View all currently active (unreturned) borrows
 
+## Architecture
+Layered structure separating data, persistence, and business logic:
+- **Controller** (`controller/`) – handles HTTP requests and responses
+- **Service** (`service/`) – business logic (availability checks, borrow/return rules)
+- **Repository** (`repository/`) – data access with Spring Data JPA
+- **Model** (`model/`) – JPA entities
+
+## Borrow / Return Rules
+- A book can only be borrowed while it is available; borrowing marks it unavailable.
+- Each borrow/return runs in one transaction with a row lock on the book, so two simultaneous requests can't borrow the same book.
+- A borrow record can only be returned once; returning marks the book available again.
+- Error responses: `404` (book/member/record not found), `409` (already borrowed, already returned, or deleting a book with borrow records), `400` (missing ids).
+
 ## Tech Stack
-- Java 17
+- Java 21
 - Spring Boot (Spring Web, Spring Data JPA)
 - H2 Database (file-based)
 - Gradle

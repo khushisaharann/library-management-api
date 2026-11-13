@@ -1,8 +1,7 @@
 package com.example.library_api.controller;
 
 import com.example.library_api.model.Member;
-import com.example.library_api.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.library_api.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,16 +10,19 @@ import java.util.List;
 @RequestMapping("/members")
 public class MemberController {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberService memberService;
+
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     @GetMapping
     public List<Member> getAllMembers() {
-        return memberRepository.findAll();
+        return memberService.getAllMembers();
     }
 
     @PostMapping
     public Member addMember(@RequestBody Member member) {
-        return memberRepository.save(member);
+        return memberService.addMember(member);
     }
 }

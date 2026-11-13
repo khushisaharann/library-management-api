@@ -37,4 +37,4 @@ out/
 .vscode/
 
 library.mv.db
-library.trace.db
+library.trace.db.DS_Store
