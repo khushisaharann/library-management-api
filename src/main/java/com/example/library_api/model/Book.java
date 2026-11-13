@@ -1,6 +1,8 @@
 package com.example.library_api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Book {
@@ -9,8 +11,16 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title is required")
+    @Size(max = 200, message = "Title must be at most 200 characters")
+    @Column(nullable = false)
     private String title;
+
+    @NotBlank(message = "Author is required")
+    @Size(max = 100, message = "Author must be at most 100 characters")
+    @Column(nullable = false)
     private String author;
+
     private boolean isAvailable = true;
 
     public Book() {}

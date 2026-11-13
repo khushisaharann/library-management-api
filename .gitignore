@@ -37,4 +37,8 @@ out/
 .vscode/
 
 library.mv.db
-library.trace.db.DS_Store
+library.trace.db
+
+### macOS ###
+.DS_Store
+

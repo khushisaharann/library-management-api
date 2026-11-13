@@ -2,6 +2,7 @@ package com.example.library_api.controller;
 
 import com.example.library_api.model.Member;
 import com.example.library_api.service.MemberService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public Member addMember(@RequestBody Member member) {
+    public Member addMember(@Valid @RequestBody Member member) {
         return memberService.addMember(member);
     }
 }

@@ -7,6 +7,7 @@ A REST API for managing a library system — books, members, and borrow/return r
 - CRUD operations for books, plus member registration
 - Borrow/return logic with availability tracking to prevent double-borrowing
 - View all currently active (unreturned) borrows
+- Input validation with Bean Validation (`@NotBlank`, `@Email`, `@Size`) — invalid requests return `400 Bad Request` with the failing fields
 
 ## Architecture
 Layered structure separating data, persistence, and business logic:
